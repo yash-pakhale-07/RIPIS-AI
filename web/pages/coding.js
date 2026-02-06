@@ -1,67 +1,74 @@
 import { useState } from "react";
 
 export default function CodingInterview() {
-    const [approach, setApproach] = useState("");
-    const [liveHint, setLiveHint] = useState("");
-    const [showHint, setShowHint] = useState(false);
+    const [answer, setAnswer] = useState("");
+    const [feedback, setFeedback] = useState("");
 
     const problem =
         "Given an array of integers, find the maximum sum of a contiguous subarray.";
 
-    const handleTyping = (text) => {
-        setApproach(text);
-
-        if (text.length < 40) {
-            setLiveHint("Start by thinking about brute-force vs optimized approach.");
-        } else if (text.length < 120) {
-            setLiveHint("Can you reduce repeated calculations?");
+    const handleSubmit = () => {
+        if (answer.trim().length === 0) {
+            setFeedback("Start by explaining your thought process before writing code.");
+        } else if (answer.length < 40) {
+            setFeedback(
+                "You’re on the right track. Try explaining how you would track the maximum sum step-by-step."
+            );
         } else {
-            setLiveHint("Consider maintaining a running value instead of nested loops.");
+            setFeedback(
+                "Good explanation. Consider mentioning time complexity and how negative values are handled."
+            );
         }
     };
 
-    return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-            <h1 className="text-3xl font-bold mb-4">Coding Interview</h1>
+    const handleHint = () => {
+        setFeedback(
+            "Hint: Maintain a running sum and reset it when it becomes negative."
+        );
+    };
 
-            <div className="bg-white p-6 rounded-lg shadow-md max-w-xl w-full">
-                <p className="font-semibold mb-2">Problem:</p>
-                <p className="mb-4">{problem}</p>
+    return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white p-6">
+            <h1 className="text-3xl font-bold mb-6">Coding Interview</h1>
+
+            <div className="bg-gray-900 rounded-xl shadow-2xl p-6 max-w-xl w-full">
+                <p className="text-lg font-semibold mb-2 text-white">Problem:</p>
+                <p className="text-gray-300 mb-5">{problem}</p>
 
                 <textarea
-                    value={approach}
-                    onChange={(e) => handleTyping(e.target.value)}
+                    className="w-full border-2 border-gray-700 bg-black text-white
+                     placeholder-gray-500 p-3 rounded mb-4
+                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows={5}
                     placeholder="Explain your approach here..."
-                    className="w-full border p-3 rounded mb-3"
-                    rows={4}
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
                 />
 
-                {approach && (
-                    <div className="mb-4 bg-blue-50 border-l-4 border-blue-400 p-3 rounded text-sm">
-                        <strong>Live Hint:</strong> {liveHint}
-                    </div>
-                )}
+                <div className="flex gap-4">
+                    <button
+                        onClick={handleSubmit}
+                        className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded font-semibold transition"
+                    >
+                        Submit Solution
+                    </button>
 
-                <button
-                    onClick={() => setShowHint(true)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                    Get Hint
-                </button>
+                    <button
+                        onClick={handleHint}
+                        className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold transition"
+                    >
+                        Get Hint
+                    </button>
+                </div>
 
-                {showHint && (
-                    <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
-                        <p className="font-semibold mb-2">Thinking Nudge:</p>
-                        <ul className="list-disc ml-5 text-sm text-gray-700 space-y-1">
-                            <li>Focus on time complexity improvements.</li>
-                            <li>Avoid recalculating overlapping subproblems.</li>
-                            <li>Track the best result seen so far.</li>
-                        </ul>
+                {feedback && (
+                    <div className="mt-4 p-4 bg-gray-800 border border-gray-700 rounded">
+                        <p className="text-sm text-green-400">{feedback}</p>
                     </div>
                 )}
             </div>
 
-            <p className="mt-6 text-sm text-gray-600">
+            <p className="mt-6 text-sm text-gray-400">
                 AI Assistance: Practice Mode (Hints Only)
             </p>
         </div>
